@@ -44,8 +44,11 @@ CREATE TABLE produtos (
 id SERIAL PRIMARY KEY,
 nome VARCHAR(50) NOT NULL,
 preco DECIMAL(4,2) NOT NULL,
-categoria_id INTEGER REFERENCES categoriasProd(id)
+categoria_id INTEGER REFERENCES categoriasProd(id) ON DELETE CASCADE --Ao deletar uma categoria o produto daquela categoria é deletado junto
 );
+
+-- AO DELETAR UMA CATEGORIA, A TABELA DE PRODUTOS ONDE O PRODUTO QUE POSSUIA AQUELA CATEGORIA VAI SER ALTERADO O CAMPO DE categoria_id como NULL
+categoria_id INTEGER REFERENCES categoriasProd(id) ON DELETE SET NULL 
 
 -- Altera a tabela adicionando a regra para não permitir nulo 
 --("SET" faz parte do dialeto do postgres)
@@ -87,7 +90,7 @@ select * from produtos where categoria_id = 4;
 -- "%" no inicio = termina com 
 -- "%" no final = começa com 
 -- "%" no inicio e final = filtra pelo texto independente da posição 
-SELECT * FROM produtos WHERE nome LIKE '%Salmão';
+SELECT * FROM produtos WHERE nome LIKE '%Salmão%';
 
 INSERT INTO clientes (nome, rg, telefone, endereco) VALUES
 ('João Silva',      '123456789', '85999990001', 'Rua das Flores, 100'),
